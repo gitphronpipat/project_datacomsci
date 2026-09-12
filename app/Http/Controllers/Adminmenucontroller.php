@@ -15,10 +15,21 @@ class Adminmenucontroller extends Controller
     public function index()
     {
         $data = [
-            'content' => 'admin/dashboard',
-           'active_menu' => 'dashboard'
+            'content' => 'admin/page_teacherandofficer',
+           'active_menu' => 'page_teacherandofficer'
         ];
         log::info('Adminmenucontroller index method called');
+
+        return view('admin/index', $data);
+    }
+
+    public function create()
+    {
+        $data = [
+            'content' => 'admin/page_teacherandofficer_add',
+            'active_menu' => 'page_teacherandofficer'
+        ];
+        log::info('Adminmenucontroller create method called');
 
         return view('admin/index', $data);
     }
@@ -26,8 +37,10 @@ class Adminmenucontroller extends Controller
     public function corn()
     {
         $data = [
-            // ใส่ตัวแปรที่จะส่งไปให้ view ตรงนี้
+            'content' => 'admin/page_admin',
+           'active_menu' => 'dashboard'
         ];
+        log::info('Adminmenucontroller index method called');
 
         return view('admin/index', $data);
     }
