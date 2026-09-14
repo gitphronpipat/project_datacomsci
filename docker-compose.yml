@@ -1,0 +1,37 @@
+services: 
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-database
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: mju66@4956   # รหัสผ่านของ root
+      MYSQL_DATABASE: datacomsci66         # สร้าง Database เริ่มต้นชื่อ laravel_db
+    ports:
+      - "3306:3306"                       # พอร์ตสำหรับเชื่อมต่อจากภายนอก (Laravel บนเครื่อง Host)
+    volumes:
+      - mysql_data:/var/lib/mysql         # เก็บข้อมูลไว้ใน Volume ป้องกันข้อมูลหายเวลารีสตาร์ท Container
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-ui
+    restart: unless-stopped
+    ports:
+      - "8081:80"                         # เข้าใช้งานผ่านเว็บเบราว์เซอร์ที่ http://localhost:8081
+    environment:
+      PMA_HOST: mysql-db                 # ชี้ไปยังชื่อ Service ของ MySQL ใน Docker Network เดียวกัน
+      PMA_PORT: 3306
+      PMA_USER: root                     # ล็อกอินด้วยผู้ใช้ root
+      PMA_PASSWORD: mju66@4956         # รหัสผ่าน root (ต้องตรงกับ MYSQL_ROOT_PASSWORD)
+    depends_on:
+      - mysql-db
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:                             # พื้นที่จัดเก็บไฟล์ฐานข้อมูลแบบถาวร
+
+networks:
+  app-network:                            # วงเครือข่ายภายในให้ Container สื่อสารหากันได้
+    driver: bridge
