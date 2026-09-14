@@ -18,8 +18,18 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     {{-- DataTables + Bootstrap5 JS --}}
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    {{-- Script ตารางของเรา --}}
+
+    {{-- Cropper.js สำหรับตัดรูปโปรไฟล์ (Image Crop) --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
+    {{-- Script ของระบบ (แยกตามโมดูลอย่างเป็นระเบียบ) --}}
     <script src="{{ asset('js/table.js') }}"></script>
+    <script src="{{ asset('js/deleteinfotable.js') }}"></script>
+    <script src="{{ asset('js/cropper.js') }}"></script>
+    <script src="{{ asset('js/custom_select.js') }}"></script>
+    <script src="{{ asset('js/eyepass.js') }}"></script>
+
 
     <style>
         /* =========================================================
@@ -28,10 +38,10 @@
         /* ตัวครอบหลักของทั้งเว็บ: ฟอนต์ Sarabun, สีตัวหนังสือหลัก, สีพื้นหลังเว็บ และระยะห่างบรรทัด */
         body {
             font-family: 'Sarabun', sans-serif;
-            color: #cc2727;
-            background-color: #f4f4f4;
+            color: #05173f;
+            background-color: #f7fafc;
             font-size: 16px;
-            line-height: 1.7;
+            line-height: 1.5;
             letter-spacing: 0.3px;
         }
 
@@ -103,31 +113,10 @@
            ========================================================= */
         /* ป้ายชื่อหัวข้อช่องกรอก (Label เช่น ชื่อ-นามสกุล, อีเมล, รหัสผ่าน) */
         .form-label {
-            color: #e20d0d !important;
-        }
-
-        /* ข้อความคำแนะนำย่อยใต้ช่องกรอก (เช่น รองรับไฟล์ JPG..., ใช้สำหรับล็อกอิน...) */
-        .form-text {
-            color: #e20d0d !important;
-        }
-
-        /* ตัวหนังสือขณะผู้ใช้กำลังพิมพ์ข้อความลงในช่องกรอก (Input Box) */
-        .form-control {
-            color: #ff05c5 !important;
-        }
-
-        /* ตัวหนังสือในกล่องเลือกแบบ Dropdown (Select Box เช่น เลือกสิทธิ์, สถานะ) */
-        .form-select {
-            color: #fff709 !important;
-        }
-
-        /* ข้อความตัวอย่างจางๆ ในช่องพิมพ์ (Placeholder เช่น ดร.สมชาย ใจดี, somchai@mju.ac.th) */
-        .form-control::placeholder {
-            color: #a0a5b1 !important;    /* สีข้อความตัวอย่าง */
-            opacity: 1 !important;        /* บังคับความคมชัด */
-            font-size: 14px;              /* ขนาดตัวอักษรตัวอย่าง */
-            font-style: italic;           /* ทำตัวเอียง */
-            font-weight: 300;             /* ความหนา-บางของตัวหนังสือ */
+            color: #000000 !important;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 0.4rem;
         }
 
         /* =========================================================
@@ -135,12 +124,31 @@
            ========================================================= */
         /* สีข้อความเน้นสำคัญหลัก (เช่น หัวข้อย่อยข้อมูลส่วนตัว, บัญชีผู้ใช้) */
         .text-primary {
-            color: #08f376 !important;
+            color: #000000 !important;
         }
 
         /* สีข้อความรอง / ข้อความจาง (เช่น คำอธิบายย่อยใต้หัวข้อหน้า) */
         .text-muted {
-            color: brown !important;
+            color: #16248c !important;
+        }
+
+        /* ข้อความตัวอย่างในช่องพิมพ์ (Placeholder) ทุกช่อง */
+        .form-control::placeholder {
+            color: #b6ccd0 !important; /* 👈 ใส่โค้ดสีที่ต้องการ เช่น เทานวลสบายตา */
+            opacity: 1 !important;     /* 👈 สำคัญมาก: ต้องใส่ 1 เพื่อไม่ให้เบราว์เซอร์ปรับสีจางลงเอง */
+        }
+
+
+        .btn-link {
+            color: #f8d6e4;
+        }
+
+        .navbar-brand {
+            color: #b8b6a3;          /* เปลี่ยนสีชื่อแบรนด์ */
+            font-weight: 700;        /* ปรับให้หนาขึ้น */
+        }
+        .navbar-brand:hover {
+            color: #4a5d23;          /* สีตอนเอาเมาส์ชี้ */
         }
 
         /* =========================================================
@@ -162,22 +170,22 @@
 
         /* ปุ่มบันทึกข้อมูลสำเร็จ (Success Button เช่น ปุ่ม 'บันทึกข้อมูล') */
         .btn-success {
-            background-color: #08f376;
-            border-color: #08f376;
-            color: #d81919;
+            background-color: #198754;
+            border-color: #198754;
             border-radius: 8px;
         }
         /* สีปุ่มสำเร็จเมื่อเอาเมาส์ไปชี้ (Hover) */
         .btn-success:hover {
-            background-color: #f8f8f8;
-            border-color: #08f376;
-            color: #f3e4e4;
+            background-color: #136840;
+            border-color: #136840;
+   
         }
 
         /* ปุ่มสีสว่าง (Light Button เช่น ปุ่ม 'ยกเลิก') */
-        .btn-light {
-            color: #1804f0;
-        }
+        /* .btn-light {
+            border-color: #f30505;
+            border-radius: 8px;
+        } */
 
         /* ปุ่มขอบบางสีเทา (Outline Button เช่น ปุ่ม 'กลับหน้ารายการ', ปุ่มรูปลูกตาดูรหัสผ่าน) */
         .btn-outline-secondary {
@@ -190,7 +198,7 @@
 
         /* ปุ่มแจ้งเตือน/ปุ่มแก้ไขสีส้ม (Warning Button เช่น ปุ่มแก้ไขในตาราง) */
         .btn-warning {
-            background-color: #f59e0b;
+            background-color: #f6d59b;
             border-color: #f59e0b;
             color: #fff;
             border-radius: 8px;
@@ -214,6 +222,171 @@
             background-color: #dc3545;
             color: #fff;
         }
+        .bg-primary {
+            color: black !important;
+            background-color : #08f376 !important;
+            min-height: 25px !important;
+            font-size: 12px;
+        }
+        .btn-outline-success {
+            color: #04f4ec !important;
+            border-color: #04f4ec !important;
+            border-width: 2px !important;
+        }
+        .btn-outline-success:hover {
+            color: #000 !important;
+            border-color: #04f4ec !important;
+            border-width: 2px !important;
+        }
+
+        .btn-back-page {
+            color: #ffffff !important;
+            background: #5b6e75  !important;
+            border-color: #5b6e75  !important;
+            text-align: center !important;
+            width: 110px !important;
+            padding: 8px 0px !important;
+            height: 40px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+        }
+
+        .btn-back-page:hover {
+            color: #ffffff !important;
+            background: #425156  !important;
+            border-color: #425156  !important;
+
+        }
+
+        /* คลาสสำหรับป้ายแสดงสิทธิ์อาจารย์ */
+        .roleteacher {
+            color: #4a5d23;              /* สีตัวหนังสือ */
+            background-color: #eaf3db;   /* สีพื้นหลังกล่องจางๆ ให้ดูสวย */
+            padding: 4px 10px;           /* ช่องไฟขอบใน */
+            border-radius: 6px;          /* มุมโค้งมน */
+            font-weight: 600;            /* ตัวหนังสือหนา */
+            font-size: 12px;
+            display: inline-block;  
+        }
+
+        /* คลาสสำหรับเจ้าหน้าที่ */
+        .roleofficer {
+            color: #0d6efd;
+            background-color: #e7f1ff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            display: inline-block;
+        }
+
     </style>
+    
+    <style> 
+                /* =========================================================
+           แนวทางที่ 2: Modern Smooth Custom Select Dropdown
+           ========================================================= */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
+        }
+
+        /* กล่องปุ่มกดเลือกภายนอก (Trigger) */
+        .custom-select-trigger {
+            background-color: #ffffff;
+            border: 1.5px solid #dee2e6;
+            border-radius: 8px;
+            padding: 0.55rem 0.95rem;
+            cursor: pointer;
+            font-size: 15px;
+            color: #212529;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* เอฟเฟกต์ตอนนำเมาส์ไปชี้กล่อง (Hover) */
+        .custom-select-trigger:hover {
+            border-color: #86b7fe;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* เมื่อเปิดเมนูกางออกมา หรือตอนคลิกเลือก: ขอบเรืองแสงสีฟ้าแบบเดียวกับกล่อง Input */
+        .custom-select-wrapper.open .custom-select-trigger,
+        .custom-select-trigger:focus {
+            border-color: #91bdff;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            outline: 0;
+        }
+
+        /* ลูกศรชี้ลง หมุนกลับด้าน 180 องศาแบบสมูท */
+        .custom-select-arrow {
+            font-size: 12px;
+            color: #6c757d;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-select-wrapper.open .custom-select-arrow {
+            transform: rotate(180deg);
+            color: #0d6efd;
+        }
+
+        /* แผงตัวเลือกที่เลื่อนสไลด์ลงมา (Slide Down + Fade-in) */
+        .custom-select-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            z-index: 1050;
+            overflow: hidden;
+
+            /* สถานะซ่อน: เลื่อนขึ้นเล็กน้อยและจางหาย */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px) scale(0.98);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        /* สถานะเปิด: สไลด์ลงมาพร้อมปรากฏอย่างนุ่มนวล สมูท 100% */
+        .custom-select-wrapper.open .custom-select-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        /* แถบตัวเลือกแต่ละรายการ */
+        .custom-select-option {
+            padding: 9px 14px;
+            font-size: 14.5px;
+            color: #333333;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+
+        .custom-select-option:hover {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding-left: 18px; /* ขยับตัวหนังสือนิดๆ เพิ่มมิติ */
+        }
+
+        /* ตัวเลือกที่กำลังถูกเลือกอยู่ในปัจจุบัน (ไฮไลต์สีฟ้าเข้าชุด) */
+        .custom-select-option.active {
+            background-color: rgba(13, 110, 253, 0.08);
+            color: #0d6efd;
+            font-weight: 600;
+        }
+
+        .custom-select-check {
+            font-size: 12px;
+            color: #0d6efd;
+        }
+    </style>
+
 
     @stack('styles')

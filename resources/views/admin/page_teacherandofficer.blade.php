@@ -1,7 +1,7 @@
 <section>
     <div class="container-fluid">
         <div class="row">
-            <div class="page-heading mb-3">
+            <div class="page-heading mb-3 py-2">
                 <div class="row align-items-center">
                     <div class="col-6">
                         <h3 class="m-0"><i class="fas fa-user-shield me-2"></i>จัดการข้อมูลอาจารย์และผู้ดูแล</h3>
@@ -16,6 +16,7 @@
         </div>
 
         <div class="page-content">
+
             <form action="{{ url('admin') }}" method="post">
                 @csrf
                 <div class="card shadow-sm">
@@ -49,15 +50,20 @@
                                                 $profile_picture = is_object($a)
                                                     ? $a->profile_picture ?? null
                                                     : $a['profile_picture'] ?? null;
+
+                                                if ($profile_picture && !str_contains($profile_picture, 'teacherandofficer')) { //ถ้ารูปมันมีคำว่า teacherandofficer ให้ยัด 'profile_image/teacherandofficer/ เข้าไป
+                                                    $profile_picture = str_replace('profile_image/', 'profile_image/teacherandofficer/', $profile_picture);
+                                                }
                                             @endphp
                                             <tr>
                                                 <td class="text-center">{{ $i + 1 }}</td>
                                                 <td class="text-center">
                                                     @if (!empty($profile_picture))
                                                         <img src="{{ asset($profile_picture) }}" alt="Profile"
-                                                            class="rounded-circle" width="40" height="40"
-                                                            style="object-fit: cover;">
+                                                            class="rounded-circle view-image-trigger shadow-sm" width="40" height="40"
+                                                            style="object-fit: cover; cursor: pointer;" title="คลิกเพื่อดูรูปขนาดใหญ่">
                                                     @else
+
                                                         <div class="rounded-circle bg-light d-inline-flex justify-content-center align-items-center text-muted"
                                                             style="width: 40px; height: 40px; border: 1px solid #dee2e6;">
                                                             <i class="fas fa-user"></i>
@@ -79,25 +85,25 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($role === 'admin')
-                                                        <span class="badge bg-primary">ผู้ดูแลระบบ (Admin)</span>
+                                                        <span class="roleadmin">ผู้ดูแลระบบ (Admin)</span>
                                                     @elseif ($role === 'teacher')
-                                                        <span class="badge bg-info text-dark">อาจารย์ (Teacher)</span>
+                                                        <span class="roleteacher">อาจารย์ (Teacher)</span>
                                                     @elseif ($role === 'officer')
-                                                        <span class="badge bg-secondary">เจ้าหน้าที่ (Officer)</span>
+                                                        <span class="roleofficer">เจ้าหน้าที่ (Officer)</span>
                                                     @else
                                                         <span class="badge bg-light text-dark">-</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    {{-- อิงตามตาราง create_admins_table.sql: 0 = ใช้งานปกติ, 1 = ปิดใช้งาน --}}
-                                                    @if ($status == '0')
-                                                        <a href="{{ url('admin/status/' . $id . '/1') }}"
+                                                    {{-- อิงตามตาราง admins: 1 = ใช้งานปกติ, 0 = ปิดใช้งาน --}}
+                                                    @if ($status == '1')
+                                                        <a href="{{ url('admin/status/' . $id . '/0') }}"
                                                             class="btn btn-sm btn-outline-success"
                                                             title="คลิกเพื่อปิดใช้งาน">
                                                             <i class="fas fa-check-circle me-1"></i> ใช้งานปกติ
                                                         </a>
                                                     @else
-                                                        <a href="{{ url('admin/status/' . $id . '/0') }}"
+                                                        <a href="{{ url('admin/status/' . $id . '/1') }}"
                                                             class="btn btn-sm btn-outline-danger"
                                                             title="คลิกเพื่อเปิดใช้งาน">
                                                             <i class="fas fa-ban me-1"></i> ปิดใช้งาน
@@ -108,14 +114,17 @@
                                                     <div class="btn-group" role="group">
                                                         <a href="{{ url('admin/edit/' . $id) }}"
                                                             class="btn btn-warning btn-sm" title="แก้ไข">
-                                                            <i class="fas fa-edit"></i>
+                                                            แก้ไข <i class="fas fa-edit"></i> 
                                                         </a>
-                                                        <a href="javascript:void(0);" class="btn btn-danger btn-sm"
-                                                            data-bs-toggle="modal" data-bs-target="#modalDel"
-                                                            data-id="{{ $id }}"
-                                                            data-url="{{ url('admin/del/' . $id) }}" title="ลบ">
-                                                            <i class="far fa-trash-alt"></i>
+                                                        <a href="#" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#modalDel" 
+                                                            data-url="{{ url('admin/del/' . $id) }}" 
+                                                            data-name="{{ $name }}" 
+                                                            class="btn btn-danger btn-sm " title="ลบ">
+                                                            <i class="fas fa-trash-alt"></i> ลบ
                                                         </a>
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -131,39 +140,5 @@
     </div>
 </section>
 
-<!-- Modal สำหรับยืนยันการลบข้อมูล -->
-<div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="modalDelLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="modalDelLabel"><i
-                        class="fas fa-exclamation-triangle me-2"></i>ยืนยันการลบข้อมูล</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้? เมื่อลบแล้วจะไม่สามารถกู้คืนได้
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                <a id="btnConfirmDelete" href="#" class="btn btn-danger">ยืนยันการลบ</a>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var modalDel = document.getElementById('modalDel');
-        if (modalDel) {
-            modalDel.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var url = button.getAttribute('data-url');
-                var confirmBtn = document.getElementById('btnConfirmDelete');
-                if (confirmBtn) {
-                    confirmBtn.setAttribute('href', url);
-                }
-            });
-        }
-    });
-</script>
+

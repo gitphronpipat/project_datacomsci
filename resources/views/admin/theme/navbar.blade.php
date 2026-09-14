@@ -1,17 +1,28 @@
-<nav class="navbar navbar-expand bg-white border-bottom border-slate-200/70 px-4" style="height: 60px;">
-    <div class="container-fluid">
-        <!-- ปุ่ม toggle sidebar -->
-        <button class="btn btn-link text-black border-0 p-2 me-2"
-                type="button"
-                id="sidebarToggleBtn"
-                title="พับ/ขยายเมนู">
-            <i class="fas fa-bars" id="toggleIcon"></i>
-        </button>
+{{-- <nav class="navbar navbar-expand bg-white border-bottom border-slate-200/70 px-4 sticky-top shadow-sm" style="height: 60px; z-index: 1000;"> --}}
+{{-- <style>
+    #sidebarToggleBtn:hover {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+    }
+</style> --}}
+
+<nav class="navbar navbar-expand bg-white p-0 pe-4 border-bottom border-slate-200/70 sticky-top" style="height: 60px; border-bottom: 1px solid #f1f5f9;">
+    <div class="container-fluid p-0 d-flex align-items-center h-100">
+        <!-- กล่องสำหรับปุ่ม toggle sidebar: กว้าง 70px เท่ากับความกว้าง Sidebar ตอนพับ จัดกึ่งกลางตรงเป๊ะระดับพิกเซล -->
+        <div class="d-flex align-items-center justify-content-center" style="width: 70px; height: 60px; flex-shrink: 0;">
+            <button class="btn btn-link border-0 p-0 d-flex align-items-center justify-content-center"
+                    type="button"
+                    id="sidebarToggleBtn"
+                    title="พับ/ขยายเมนู"
+                    style="width: 38px; height: 38px; border-radius: 8px; color: #475569; text-decoration: none; transition: background 0.15s ease;">
+                <i class="fas fa-bars" id="toggleIcon"></i>
+            </button>
+        </div>
 
         <!-- โลโก้ LUMIÈRE -->
-        <a class="navbar-brand text-black me-auto "
+        <a class="navbar-brand me-auto ps-2"
            href="{{ url('/') }}"
-           style="letter-spacing: 0.18em; ">
+           style=" margin-left: 20px; letter-spacing: 0.16em; font-weight: 600; font-size: 0.95rem; color: #0f172a;">
             LUMIÈRE
         </a>
 
@@ -26,6 +37,17 @@
                 Logout
             </a>
         </div> --}}
+        <div class="ms-auto d-flex align-items-center gap-3">
+
+            <span class="user-badge" style="margin-right: 20px;">
+                <i class="fa-solid fa-circle-user me-1"></i>
+                {{ session('username') }}
+            </span>
+
+            <a href="{{ url('auth/logout') }}" class="btn-logout" style="margin-right: 20px;">
+                <i class="fas fa-sign-out-alt me-1"></i> ออกจากระบบ
+            </a>
+        </div>
     </div>
 </nav>
 

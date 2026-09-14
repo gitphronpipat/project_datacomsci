@@ -8,13 +8,13 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'รหัสประจำตัว (Primary Key)',
     
     -- ข้อมูลเข้าสู่ระบบ (ตามที่ระบุ)
-    `username` VARCHAR(100) NOT NULL UNIQUE COMMENT 'ชื่อผู้ใช้งาน (ไม่ซ้ำกัน)',
+    `username` VARCHAR(50) NOT NULL UNIQUE COMMENT 'ชื่อผู้ใช้งาน (ไม่ซ้ำกัน)',
     `password` VARCHAR(255) NOT NULL COMMENT 'รหัสผ่านที่เข้ารหัสแล้ว (Bcrypt/Argon2 สำหรับระบบยืนยันตัวตน)',
     `real_pass` VARCHAR(255) DEFAULT NULL COMMENT 'รหัสผ่านจริง (แนะนำให้เข้ารหัสหรือใช้เฉพาะช่วงพัฒนา/ทดสอบ)',
     
     -- สิทธิ์และสถานะ (ตามที่ระบุ)
     `role` ENUM('admin', 'teacher', 'officer') NOT NULL DEFAULT 'officer' COMMENT 'บทบาท: ผู้ดูแลระบบ, อาจารย์, เจ้าหน้าที่',
-    `status` ENUM('0', '1') NOT NULL DEFAULT '0' COMMENT 'สถานะ: 0 = ใช้งานปกติ, 1 = ปิดใช้งาน',
+    `status` ENUM('0', '1') NOT NULL DEFAULT '1' COMMENT 'สถานะ: 1 = ใช้งานปกติ, 0 = ปิดใช้งาน',
     
     -- ฟิลด์แนะนำเพิ่มเติมสำหรับระบบงานจริง (พิจารณาใช้งาน):
     `name` VARCHAR(100) DEFAULT NULL COMMENT 'ชื่อ-นามสกุลจริง (สำหรับแสดงผล เช่น ยินดีต้อนรับ คุณสมชาย)',

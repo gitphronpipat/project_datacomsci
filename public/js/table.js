@@ -13,8 +13,10 @@ $(document).ready(function () {
             padding: 10px 12px !important;
             vertical-align: middle !important;
             font-family: inherit !important;
-            color: inherit !important;
+            color: #505050ff !important;
             font-size: 13px !important;
+            font-weight: 600 !important;
+            white-space: nowrap;
         }
 
         /* เปลี่ยนลูกศรจัดเรียงเป็น Font Awesome เส้นโค้งมน (Chevron) */
@@ -26,35 +28,32 @@ $(document).ready(function () {
         table.dataTable thead .sorting_desc::after {
             font-family: "Font Awesome 6 Free" !important;
             font-weight: 900 !important;
-            font-size: 10px !important;
+            font-size: 9.5px !important;
             right: 8px !important;
-            color: #94a3b8 !important;
-            opacity: 0.4 !important;
+            color: #cbd5e1 !important;
+            opacity: 0.6 !important;
         }
 
         /* ลูกศรชี้ขึ้น */
         table.dataTable thead .sorting::before,
         table.dataTable thead .sorting_asc::before,
         table.dataTable thead .sorting_desc::before {
-            content: "\\f30c" !important;
-            top: 20% !important;
+            content: "\\f077" !important;
+            top: 28% !important;
         }
 
         /* ลูกศรชี้ลง */
         table.dataTable thead .sorting::after,
         table.dataTable thead .sorting_asc::after,
         table.dataTable thead .sorting_desc::after {
-            content: "\\f309" !important;
-            bottom: 20% !important;
+            content: "\\f078" !important;
+            bottom: 28% !important;
         }
 
         /* เมื่อคลิกเรียงคอลัมน์: ไฮไลต์ลูกศรที่กำลังทำงานเป็นสีน้ำเงินเข้มเด่นชัด */
-        table.dataTable thead .sorting_asc::before {
-            color: #2563eb !important;
-            opacity: 1 !important;
-        }
+        table.dataTable thead .sorting_asc::before ,
         table.dataTable thead .sorting_desc::after {
-            color: #2563eb !important;
+             color: #0f172a !important;
             opacity: 1 !important;
         }
 
@@ -63,13 +62,6 @@ $(document).ready(function () {
             padding-right: 24px !important;
         }
 
-
-
-        /* ตกแต่งหัวตารางให้ดูโมเดิร์น */
-        table.dataTable thead th {
-            font-weight: 600 !important;
-            white-space: nowrap;
-        }
 
         /* สลับสีแถวให้อ่านง่าย สบายตา (Zebra stripes) */
         table.dataTable tbody tr:nth-of-type(odd) {
@@ -82,23 +74,51 @@ $(document).ready(function () {
             transition: background-color 0.15s ease-in-out;
         }
 
-        /* แต่งข้อความกำกับของทั้ง 'ค้นหา' และ 'แสดงแถว' ให้ตรงกันตาม body */
-        .dataTables_filter label,
-        .dataTables_length label {
-            font-family: inherit !important;   /* ใช้ฟอนต์ Sarabun ตาม body */
-            color: inherit !important;         /* ใช้สี #25396f ตาม body */
-            font-size: inherit !important;      /* ใช้ขนาดเท่ากับ body */
-            font-weight: 500 !important;
+        /* กล่องค้นหา (Modern Floating Search Box) */
+        .dataTables_filter {
             display: inline-flex !important;
             align-items: center !important;
+            justify-content: flex-end !important;
         }
 
-        /* แต่งทั้งกล่องค้นหา (input) และกล่องเลือกจำนวนแถว (select) ให้มีสไตล์คู่กัน */
-        .dataTables_filter input {
-            width: 250px !important;         /* ปรับความกว้าง (เช่น 250px หรือ 300px) */
-            padding: 8px 8px !important;     /* เพิ่มความโปร่งสบาย */
-            margin: 4px 0 4px 8px !important;
+        .dataTables_filter label {
+            position: relative !important;
+            margin: 0 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            font-size: 0 !important; /* ซ่อนข้อความ 'ค้นหา:' */
         }
+
+        .dataTables_filter label::before {
+            content: "\\f002";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 13px;
+            font-size: 13px;
+            color: #505d70ff;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .dataTables_filter input {
+            width: 240px !important;
+            height: 38px !important;
+            padding: 6px 14px 6px 36px !important;
+            font-size: 13.5px !important;
+            border-radius: 8px !important;
+            border: 1px solid #cdd5dfff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            outline: none !important;
+            transition: all 0.15s ease;
+            margin-left:-3px !important;
+        }
+
+        .dataTables_filter input:focus {
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.06) !important;
+        }   
+
         .dataTables_length select {
             border-radius: 8px !important;
             border: 1px solid #cbd5e1 !important;
@@ -108,6 +128,14 @@ $(document).ready(function () {
             font-size: inherit !important;
             background-color: #fff !important;
             transition: all 0.2s ease;
+        }        
+        .dataTables_length label {
+            display: inline-flex !important;
+            align-items: center !important;
+            font-size: 13.5px !important;
+            color: #505d70ff !important;
+            font-weight: 400 !important;
+            margin: 0 !important;
         }
 
         /* เฉพาะกล่องเลือกจำนวนแถว (Length Select) */
@@ -120,7 +148,7 @@ $(document).ready(function () {
         }
 
         /* แสงเรืองสีฟ้าตอนคลิกเลือก (:focus) ของทั้งสองกล่องให้เหมือนกันเป๊ะ */
-        .dataTables_filter input:focus,
+        
         .dataTables_length select:focus {
             border-color: #3b82f6 !important;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
@@ -131,7 +159,7 @@ $(document).ready(function () {
         /* ปรับแต่งข้อความแสดงจำนวนแถว (Info) */
         .dataTables_info {
             font-family: inherit !important;
-            color: #475569 !important;
+            color: #64748b !important;
             font-size: 14px !important;
             padding-top: 8px !important;
         }
@@ -168,27 +196,28 @@ $(document).ready(function () {
             box-shadow: none !important;
         }
 
-        /* ปุ่มคืนค่ารายการ (ล้างการค้นหา) */
+        /* ปุ่ม 'คืนค่ารายการ' */
         .btn-reset-filter {
+            height: 38px !important;
             border-radius: 8px !important;
             padding: 6px 14px !important;
-            margin: 4px 0 4px 8px !important;
-            font-family: inherit !important;
+            margin: 0 0 0 8px !important;
             font-size: 13px !important;
             font-weight: 500 !important;
-            border: 1px solid #cbd5e1 !important;
-            color: #475569 !important;
-            background-color: #fff !important;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-            transition: all 0.2s ease;
+            border: 1px solid #cdd5dfff !important;
+            color: #64748b !important;
+            background-color: #ffffff !important;
+            box-shadow: none !important;
+            transition: all 0.15s ease;
             display: inline-flex !important;
             align-items: center !important;
             cursor: pointer;
         }
+
         .btn-reset-filter:hover {
-            background-color: #f1f5f9 !important;
-            color: #1e293b !important;
-            border-color: #94a3b8 !important;
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
         }
         .btn-reset-filter:active {
             transform: scale(0.98);
@@ -207,8 +236,24 @@ $(document).ready(function () {
             info: "แสดงทั้งหมด _START_ ถึง _END_ จาก _TOTAL_ รายการ",
             infoEmpty: "แสดงทั้งหมด 0 ถึง 0 จาก 0 รายการ",
             infoFiltered: "(ค้นหาจากทั้งหมด _MAX_ รายการ)",
-            emptyTable: "ไม่พบข้อมูลในตาราง",
-            zeroRecords: "ไม่พบข้อมูลที่ตรงกับการค้นหา",
+            emptyTable: `
+                <div class="empty-state-container">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div class="fw-semibold" style="color: #334155; font-size: 14.5px;">ยังไม่มีข้อมูลในตาราง</div>
+
+                </div>
+            `,
+            zeroRecords: `
+                <div class="empty-state-container">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="fw-semibold" style="color: #334155; font-size: 14.5px;">ไม่พบข้อมูลที่ตรงกับการค้นหา</div>
+                    <div class="text-muted small mt-1">ลองตรวจสอบคำสะกด หรือกดปุ่ม "คืนค่ารายการ" เพื่อล้างการค้นหา</div>
+                </div>
+            `,
             lengthMenu: "แสดง _MENU_ แถว",
             search: "ค้นหา:",
             searchPlaceholder: "พิมพ์เพื่อค้นหา...",
