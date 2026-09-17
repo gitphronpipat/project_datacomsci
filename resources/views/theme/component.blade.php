@@ -156,15 +156,15 @@
            ========================================================= */
         /* ปุ่มหลัก (Primary Button เช่น ปุ่ม 'เพิ่มข้อมูล' สีเขียวเข้ม) */
         .btn-primary {
-            background-color: #4a5d23;
-            border-color: #4a5d23;
+            background-color: #2563eb !important;
+            border-color: #2563eb !important;
             color: #fff;
             border-radius: 8px;
         }
         /* สีปุ่มหลักเมื่อเอาเมาส์ไปชี้ (Hover) */
         .btn-primary:hover {
-            background-color: #3a4a1c;
-            border-color: #3a4a1c;
+            background-color: #1f55c9 !important;
+            border-color: #1f55c9 !important;
             color: #fff;
         }
 
@@ -280,6 +280,21 @@
             display: inline-block;
         }
 
+        /* แถวตารางที่ปิดใช้งาน (Inactive Row) ปรับสีจางลง พร้อมเอฟเฟกต์ชี้เมาส์ */
+        .table-row-inactive {
+            opacity: 0.55;
+            background-color: #f8fafc !important;
+            transition: all 0.2s ease;
+        }
+
+        .table-row-inactive:hover {
+            opacity: 0.9;
+            background-color: #f1f5f9 !important;
+        }
+
+        .table-row-inactive td {
+            color: #64748b !important;
+        }
     </style>
     
     <style> 

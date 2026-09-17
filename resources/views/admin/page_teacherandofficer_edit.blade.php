@@ -56,6 +56,17 @@
                                 <input type="file" id="profile_picture" name="profile_picture"
                                        class="form-control form-control-sm d-none image-crop"
                                        accept="image/*">
+                                <input type="hidden" id="remove_profile_picture" name="remove_profile_picture" value="0">
+
+                                <!-- ปุ่มล้างรูปภาพ (จะแสดงเมื่อมีรูปภาพอยู่เท่านั้น) -->
+                                <div class="mt-2 mb-2" id="clearPictureWrapper" style="{{ empty($admin->profile_picture) ? 'display: none;' : '' }}">
+                                    <button type="button" id="btnClearPicture"
+                                            class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 shadow-2xs"
+                                            style="font-size: 12px; font-weight: 500;">
+                                        <i class="fas fa-trash-alt me-1"></i> ล้างรูปภาพ
+                                    </button>
+                                </div>
+
                                 <div class="form-text small text-muted">
                                     รองรับไฟล์ JPG, PNG<br>(ขนาดไม่เกิน 2MB)
                                 </div>
@@ -166,56 +177,3 @@
         </div>
     </div>
 </section>
-
-<!-- สคริปต์แสดง/ซ่อนรหัสผ่าน และ ตัวนับตัวอักษรแบบนับถอยหลัง -->
-<script>
-    // สลับดูรหัสผ่าน (ดวงตา)
-    function togglePasswordVisibility(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        if (!input || !icon) return;
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
-
-    // ตัวนับตัวอักษรแบบ Real-time นับลดลงตามที่ผู้ใช้พิมพ์
-    function updateCharCounter(input) {
-        const max = parseInt(input.getAttribute('maxlength'), 10);
-        if (!max) return;
-        const currentLength = input.value ? input.value.length : 0;
-        const remaining = Math.max(0, max - currentLength);
-        const counterEl = document.getElementById('counter_' + input.id);
-        if (counterEl) {
-            counterEl.textContent = `${remaining}/${max}`;
-            if (remaining === 0) {
-                counterEl.classList.remove('text-muted', 'text-warning');
-                counterEl.classList.add('text-danger', 'fw-bold');
-            } else if (remaining <= 5) {
-                counterEl.classList.remove('text-muted', 'text-danger', 'fw-bold');
-                counterEl.classList.add('text-warning', 'fw-medium');
-            } else {
-                counterEl.classList.remove('text-danger', 'text-warning', 'fw-bold', 'fw-medium');
-                counterEl.classList.add('text-muted');
-            }
-        }
-    }
-
-    // ติดตั้ง Event Listener ให้กับทุกช่องที่มี maxlength
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('input[maxlength]').forEach(function(input) {
-            input.addEventListener('input', function() {
-                updateCharCounter(this);
-            });
-            // คำนวณทันทีเมื่อโหลดหน้า (รองรับข้อมูลเดิมในหน้าแก้ไข)
-            updateCharCounter(input);
-        });
-    });
-</script>
-

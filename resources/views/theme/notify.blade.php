@@ -17,6 +17,8 @@ $titles = [
     'wellcome'   => 'ยินดีต้อนรับ',
     'welcome'    => 'ยินดีต้อนรับ',
     'logout'     => 'ออกจากระบบ',
+    'loginfail'  => 'เข้าสู่ระบบไม่สำเร็จ',
+    'loginblock' => 'บัญชีของคุณถูกปิดใช้งาน'
 ];
 
 // ชนิดของกล่องแจ้งเตือน iziToast (success, error, warning, info)
@@ -33,6 +35,8 @@ $types = [
     'wellcome'   => 'success',
     'welcome'    => 'success',
     'logout'     => 'error',       // สีแดง (error)
+    'loginfail'  => 'error',       // สีแดง (error)
+    'loginblock' => 'error',       // สีแดง (error)
 ];
 
 // ไอคอนเสริม FontAwesome สวยๆ สำหรับแต่ละสถานะ
@@ -49,6 +53,8 @@ $customIcons = [
     'wellcome'   => 'fas fa-user-check',
     'welcome'    => 'fas fa-user-check',
     'logout'     => 'fas fa-sign-out-alt',
+    'loginfail'  => 'fas fa-sign-out-alt',
+    'loginblock' => 'fas fa-sign-out-alt',
 ];
 
 $activeType = $result && isset($types[$result]) ? $types[$result] : 'info';

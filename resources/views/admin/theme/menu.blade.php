@@ -61,7 +61,7 @@
             align-items: center;
             gap: 10px;
             font-size: 12px;
-            color: #94a3b8;
+            color: #475569;
             transition: padding 0.25s ease;
         }
 
@@ -104,9 +104,10 @@
         /* เมนูใหญ่ (Toggle) จะเป็นสีเทาเฉพาะตอนที่เมนูนั้น Active (มีหน้าย่อยเปิดใช้งานอยู่) เท่านั้น
            การกดเปิดแท็บดูเมนูย่อยเฉยๆ จะไม่เป็นสีเทาค้าง */
         .sidebar .toggle.active {
-            background-color: #e9e9e9 !important;
+            background-color: #eeeeee !important;
             color: #0f172a !important;
             font-weight: 600 !important;
+            border: 0.1px solid #abb1c0 !important;
         }
 
         .sidebar .toggle.active:hover {
@@ -119,8 +120,9 @@
             position: relative;
             margin-left: 1.8rem;
             padding-left: 1.2rem;
+            padding-top:0.5rem;
             border-left: 2px solid #cbd5e1; /* เส้นแนวตั้งเชื่อมจากเมนูแม่ลงมา */
-            margin-top: 0.35rem;
+            margin-top: -0.1rem;
             margin-bottom: 0.5rem;
         }
 
@@ -178,7 +180,7 @@
         /* เมื่อเมนูย่อย Active: กรอบเข้มขึ้นและเส้นเชื่อมเข้มตาม */
         .sidebar .child a.active {
             background-color: #ffffff !important;
-            border: 1.5px solid #0f172a !important; /* กรอบเข้มเด่นชัด */
+            border: 1px solid #0f172a !important;
             color: #0f172a !important;
             font-weight: 600 !important;
             box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
@@ -254,9 +256,9 @@
         /* เมนูย่อตอน Active: ปรับสีพื้นหลังให้เป็น #e9e9e9 ตรงกับตอนเปิดเมนู */
         .sidebar.collapsed > .menu-wrapper > a.active,
         .sidebar.collapsed .toggle.active {
-            background-color: #e9e9e9 !important;
+            background-color: #eeeeee !important;
             color: #0f172a !important;
-            /* border-bottom: 0.1px solid #0f172a !important; */
+            border: 0.1px solid #abb1c0 !important;
             border-radius: 50% !important;
         }
 
@@ -280,7 +282,7 @@
             bottom: 28px;
             left: 50%;
             width: 1px;
-            background-color: #1a2746; /* สีตรงกับเส้นกิ่งของเมนูตอนเปิด */
+            background-color: #727b86 !important;
             transform: translateX(-50%);
             z-index: 1;
         }
@@ -323,7 +325,7 @@
         }
 
         .sidebar.collapsed .child a.active {
-            border: 1.5px solid #0f172a !important;
+            border: 2px solid #1e2d50 !important;
             background-color: #ffffff !important; /* การ์ดสีขาวกรอบเข้มเหมือนตอนเปิดเมนู */
         }
 

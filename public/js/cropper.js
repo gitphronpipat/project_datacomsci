@@ -249,6 +249,12 @@
                     placeholder.style.display = 'none';
                 }
 
+                // นำรูปไปใส่ในฟอร์มสำเร็จ: ยกเลิกสถานะลบรูป และแสดงปุ่ม "ล้างรูปภาพ"
+                const removePicInput = document.getElementById('remove_profile_picture');
+                const clearWrap = document.getElementById('clearPictureWrapper');
+                if (removePicInput) removePicInput.value = '0';
+                if (clearWrap) clearWrap.style.display = 'block';
+
                 // ปิด Modal ตัดรูป
                 const cropModalEl = document.getElementById('modalCropImage');
                 if (cropModalEl) {
@@ -297,5 +303,56 @@
             }
             viewModal.show();
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // ระบบปุ่ม "ล้างรูปภาพ" (ซ่อนรูปบนหน้าจอ และส่งค่าไปลบในตารางตอนกดบันทึกการแก้ไข)
+        const btnClearPicture = document.getElementById('btnClearPicture');
+        const clearPictureWrapper = document.getElementById('clearPictureWrapper');
+        const removePictureInput = document.getElementById('remove_profile_picture');
+        const imagePreview = document.getElementById('imagePreview');
+        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+        const fileInput = document.getElementById('profile_picture');
+
+        if (btnClearPicture) {
+            btnClearPicture.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // ตั้งค่าแจ้งให้ Controller ทราบว่าตอนกดเซฟให้ลบรูปในตารางออก
+                if (removePictureInput) removePictureInput.value = '1';
+                if (fileInput) fileInput.value = '';
+
+                // สลับ UI บนหน้าจอให้เห็นว่ารูปถูกล้างออกแล้ว
+                if (imagePreview) {
+                    imagePreview.src = '#';
+                    imagePreview.style.display = 'none';
+                }
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.display = 'block';
+                }
+                if (clearPictureWrapper) {
+                    clearPictureWrapper.style.display = 'none';
+                }
+            });
+        }
+
+        // เมื่อปิด Modal ตัดรูปภาพ (กดยกเลิก หรือปิดหน้าต่าง)
+        // ถ้าหน้าจอไม่ได้ใส่รูปจริง ให้ซ่อนปุ่มล้างรูปและเคลียร์ค่าไฟล์
+        $('#modalCropImage').on('hidden.bs.modal', function() {
+            const preview = document.getElementById('imagePreview');
+            const hasRealPicture = preview && preview.style.display !== 'none' && preview.src && !preview.src.includes('#');
+
+            if (!hasRealPicture) {
+                // ไม่มีรูปจริง (เป็นเงาคน) เคลียร์ไฟล์และซ่อนปุ่มล้างรูปภาพ
+                clearFileInput();
+                if (clearPictureWrapper) clearPictureWrapper.style.display = 'none';
+            } else {
+                // มีรูปเดิมอยู่แล้ว แต่เปิดมาแล้วกดยกเลิก (ไม่ได้ตัดรูปใหม่)
+                // ให้เคลียร์ input file ชั่วคราวเพื่อไม่ให้อัปโหลดไฟล์ดิบ
+                if (!preview.src.startsWith('data:image')) {
+                    clearFileInput();
+                }
+            }
+        });
     });
 

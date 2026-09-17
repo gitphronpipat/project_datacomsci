@@ -55,7 +55,7 @@
                                                     $profile_picture = str_replace('profile_image/', 'profile_image/teacherandofficer/', $profile_picture);
                                                 }
                                             @endphp
-                                            <tr>
+                                            <tr class="{{ $status == '0' ? 'table-row-inactive' : '' }}">
                                                 <td class="text-center">{{ $i + 1 }}</td>
                                                 <td class="text-center">
                                                     @if (!empty($profile_picture))
@@ -95,16 +95,34 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    {{-- อิงตามตาราง admins: 1 = ใช้งานปกติ, 0 = ปิดใช้งาน --}}
+                                                    {{-- อิงตามตาราง admins: 1 = ใช้งานปกติ, 0 = ปิดใช้งาน พร้อมแจ้งเตือนยืนยันก่อนเปลี่ยน --}}
                                                     @if ($status == '1')
-                                                        <a href="{{ url('admin/status/' . $id . '/0') }}"
+                                                        <a href="javascript:void(0)"
                                                             class="btn btn-sm btn-outline-success"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modalConfirmAction"
+                                                            data-title="ยืนยันการปิดใช้งาน?"
+                                                            data-message="คุณต้องการปิดการใช้งานบัญชี <b style='font-size: 18px;' >'{{ $name }}'</b>  <br>ผู้ใช้จะไม่สามารถเข้าสู่ระบบได้ชั่วคราว"
+                                                            data-url="{{ url('admin/status/' . $id . '/0') }}"
+                                                            data-btn-text="ปิดใช้งาน"
+                                                            data-btn-class="btn-danger"
+                                                            data-icon="fas fa-ban"
+                                                            data-icon-box="bg-danger-subtle text-danger"
                                                             title="คลิกเพื่อปิดใช้งาน">
                                                             <i class="fas fa-check-circle me-1"></i> ใช้งานปกติ
                                                         </a>
                                                     @else
-                                                        <a href="{{ url('admin/status/' . $id . '/1') }}"
+                                                        <a href="javascript:void(0)"
                                                             class="btn btn-sm btn-outline-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modalConfirmAction"
+                                                            data-title="ยืนยันการเปิดใช้งาน?"
+                                                            data-message="คุณต้องการเปิดใช้งานบัญชี <b style='font-size: 18px;' >'{{ $name }}'</b>"
+                                                            data-url="{{ url('admin/status/' . $id . '/1') }}"
+                                                            data-btn-text="เปิดใช้งาน"
+                                                            data-btn-class="btn-success"
+                                                            data-icon="fas fa-check-circle"
+                                                            data-icon-box="bg-success-subtle text-success"
                                                             title="คลิกเพื่อเปิดใช้งาน">
                                                             <i class="fas fa-ban me-1"></i> ปิดใช้งาน
                                                         </a>

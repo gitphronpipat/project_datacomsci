@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @include('component')
-
-
+    @include('theme.component')
 </head>
 <body>
 
@@ -25,33 +23,11 @@
 
 
 
-    
 
-<div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="modalDelLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="modalDelLabel">
-                    <i class="fas fa-exclamation-triangle me-2"></i>ยืนยันการลบข้อมูล
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูล <strong class="text-danger" id="del_name"></strong> <br>
-                เมื่อลบแล้วจะไม่สามารถกู้คืนได้
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                <a id="btnConfirmDelete" href="#" class="btn btn-danger">ยืนยันการลบ</a>
-            </div>
-        </div>
-    </div>
-</div>
 
-    <!-- Modal สำหรับอัปโหลดและตัดรูปโปรไฟล์ (Dropzone + Cropper 2-in-1 กลาง) -->
     <div class="modal fade" id="modalCropImage" tabindex="-1" aria-labelledby="modalCropImageLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-lg justify-content-center">
+            <div class="modal-content" style="width: 80%; margin: 0 auto; border-radius: 10px; overflow: hidden;">
                 <div class="modal-header bg-primary text-white py-2">
                     <h5 class="modal-title fs-6 text-white" id="modalCropImageLabel">
                         <i class="fas fa-camera me-2"></i>อัปโหลดและปรับขนาดรูปโปรไฟล์ (1:1)
@@ -67,7 +43,7 @@
                             <i class="fas fa-cloud-upload-alt fa-4x text-success mb-3"></i>
                             <h5 class="fw-bold text-dark">ลากรูปภาพมาวางที่นี่</h5>
                             <p class="text-muted small mb-3">
-                                สามารถลากรูปจาก Google / เว็บไซต์อื่น หรือจากในเครื่องมาวางได้โดยตรง<br>
+                                สามารถลากรูปจาก Google / เว็บไซต์<br>
                                 หรือกดปุ่มด้านล่างเพื่อเลือกรูปภาพ
                             </p>
                             <button type="button" class="btn btn-primary px-4 py-2 shadow-sm" id="btnSelectLocalFile">
@@ -133,8 +109,11 @@
         </div>
     </div>
 
+    <!-- ระบบ Modal ยืนยันการตัดสินใจ (ออกจากระบบ, ลบข้อมูล, ยืนยันเปลี่ยนสถานะ) -->
+    @include('theme.alert')
+
     <!-- ระบบแจ้งเตือนกลาง (iziToast Notifications) -->
-    @include('notify')
+    @include('theme.notify')
 
 </body>
 </html>

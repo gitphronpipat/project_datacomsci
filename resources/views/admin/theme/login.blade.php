@@ -6,7 +6,7 @@
     <title>เข้าสู่ระบบผู้ดูแลระบบ | Admin Login</title>
 
     <!-- เรียกใช้ Asset และไลบรารีกลางของระบบ (Font Awesome, Bootstrap 5, ฟอนต์ Sarabun, eyepass.js) -->
-    @include('component')
+    @include('theme.component')
 
     <!-- ฟอนต์เสริม Prompt สำหรับหัวข้อ LOGIN สไตล์โมเดิร์น -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -321,10 +321,10 @@
             </div>
 
             <!-- หัวข้อ LOGIN -->
-            <h1 class="login-title">LOGIN</h1>
+            <h1 class="login-title">ADMIN</h1>
 
             <!-- ฟอร์มเข้าสู่ระบบส่งไปยัง route login.post (ฟังก์ชัน loginAdmin ใน Controller) -->
-            <form action="{{ route('login.post') }}" method="POST" autocomplete="off">
+            <form action="{{ route('login.post') }}" method="POST">
                 @csrf
 
                 <!-- ช่องกรอกชื่อผู้ใช้งาน (Username) -->
@@ -333,8 +333,9 @@
                     <input type="text" 
                            name="username" 
                            id="username"
+                           autocomplete="username"
                            placeholder="Username" 
-                           value="{{ old('username') }}" 
+                           value="{{ old('username', Cookie::get('remember_username')) }}" 
                            required 
                            autofocus>
                 </div>
@@ -345,6 +346,7 @@
                     <input type="password" 
                            name="password" 
                            id="password"
+                           autocomplete="current-password"
                            placeholder="Password" 
                            required>
                     <i class="fa-solid fa-eye-slash toggle-password" id="togglePasswordBtn" onclick="togglePasswordVisibility('password', 'togglePasswordBtn')" title="แสดง/ซ่อนรหัสผ่าน"></i>
@@ -352,7 +354,7 @@
 
                 <!-- ตัวเลือก Remember me -->
                 <div class="form-check-custom">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <input type="checkbox" name="remember" id="remember" {{ old('remember') || Cookie::has('remember_username') ? 'checked' : '' }}>
                     <label for="remember">Remember me</label>
                 </div>
 
@@ -362,18 +364,18 @@
                 </button>  
 
                 <!-- ลิงก์ Forgot Username / Password -->
-                <div>
+                {{-- <div>
                     <a href="javascript:void(0);" 
                        onclick="alert('หากลืมชื่อผู้ใช้หรือรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบเพื่อรีเซ็ตข้อมูล');" 
                        class="forgot-link">
                         Forgot Username / Password?
                     </a>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>
 
     <!-- ใช้งานระบบแจ้งเตือนกลาง iziToast (ที่มีการปรับแต่งไว้แล้ว) -->
-    @include('notify')
+    @include('theme.notify')
 </body>
 </html>

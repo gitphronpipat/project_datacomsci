@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `phone` VARCHAR(20) DEFAULT NULL COMMENT 'เบอร์โทรศัพท์ติดต่อ',
     `profile_picture` VARCHAR(255) DEFAULT NULL COMMENT 'ลิงก์หรือ path รูปภาพบัตรประชาชน',
     `last_login_at` DATETIME DEFAULT NULL COMMENT 'เวลาที่เข้าสู่ระบบล่าสุด (สำหรับตรวจสอบความปลอดภัย)',
-    `remember_token` VARCHAR(100) DEFAULT NULL COMMENT 'Token สำหรับระบบจดจำการเข้าสู่ระบบของ Laravel (Remember Me)',
     
     -- เวลาบันทึกและแก้ไขข้อมูล (มาตรฐานของ Laravel)
     `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'วันที่สร้างข้อมูล',

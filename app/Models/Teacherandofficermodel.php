@@ -36,7 +36,6 @@ class Teacherandofficermodel extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
         'real_pass',
     ];
 

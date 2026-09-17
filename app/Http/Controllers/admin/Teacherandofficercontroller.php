@@ -11,20 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class Teacherandofficercontroller extends Controller
 {
-    public function __construct()
-    {
-    //   parent::__construct();
-    //     if (!$this->session->userdata('logged_in')) {
-    //         redirect('auth/login');
-    //     }
-    //     // ตรวจสอบสิทธิ์ Admin เท่านั้น
-    //     if ($this->session->userdata('role') !== 'admin') {
-    //         $this->session->set_flashdata('result', 'false');
-    //         $this->session->set_flashdata('message', 'เฉพาะแอดมินเท่านั้นที่สามารถเข้าถึงหน้านี้ได้');
-    //         redirect('player');
-    //     }
-    }
-
     /**
      * หน้ารายการอาจารย์และเจ้าหน้าที่ (ตาราง)
      */
@@ -161,7 +147,7 @@ class Teacherandofficercontroller extends Controller
         Log::info('Teacher/Officer created successfully: ' . $request->username);
 
         // บันทึกเสร็จแล้ว redirect กลับไปยังหน้ารายการ (แจ้งเตือนสถานะเพิ่มข้อมูลสำเร็จ: addinfo พร้อมใส่ชื่อ)
-        return redirect('/')->with('result', 'addinfo')->with('message', 'เพิ่มข้อมูล "' . $admin->name . '" เรียบร้อยแล้ว');
+        return redirect('/pc-csmju')->with('result', 'addinfo')->with('message', 'เพิ่มข้อมูล "' . $admin->name . '" เรียบร้อยแล้ว');
     }
 
     /** 
@@ -172,7 +158,7 @@ class Teacherandofficercontroller extends Controller
         // ค้นหาข้อมูลตาม ID ผ่าน Model
         $admin = Teacherandofficermodel::find($id);
         if (!$admin) {
-            return redirect('/')->with('result', 'false')->with('message', 'ไม่พบข้อมูลที่ต้องการแก้ไข');
+            return redirect('/pc-csmju')->with('result', 'false')->with('message', 'ไม่พบข้อมูลที่ต้องการแก้ไข');
         }
 
         $data = [
@@ -284,14 +270,37 @@ class Teacherandofficercontroller extends Controller
             $fileName = $admin->id . '_' . $roleCode . '_' . date('Ymd_His') . '.' . $ext;
             $file->move($uploadDir, $fileName);
             $updateData['profile_picture'] = 'profile_image/teacherandofficer/' . $fileName;
+        } elseif ($request->input('remove_profile_picture') == '1' || $request->remove_profile_picture == '1') {
+            // กรณีผู้ใช้กดปุ่ม "ล้างรูปภาพ" (ไม่เอารูปภาพ)
+            if ($admin->profile_picture && file_exists(public_path($admin->profile_picture))) {
+                @unlink(public_path($admin->profile_picture));
+            }
+            $updateData['profile_picture'] = null;
         }
 
 
-        // อัปเดตข้อมูลผ่าน Model
+        // อัปเดตข้อมูลผ่าน Model และบันทึกลงตาราง admins ตรงๆ เพื่อให้มั่นใจว่า profile_picture เป็น NULL แน่นอน
         $admin->update($updateData);
+        if (array_key_exists('profile_picture', $updateData)) {
+            \Illuminate\Support\Facades\DB::table('admins')
+                ->where('id', $admin->id)
+                ->update(['profile_picture' => $updateData['profile_picture']]);
+            $admin->profile_picture = $updateData['profile_picture'];
+        }
+
+        // หากผู้ใช้ที่กำลังแก้ไขเป็นบัญชีเดียวกับที่ล็อกอินอยู่ในปัจจุบัน ให้อัปเดต Session ตามด้วย
+        if (session('user_id') == $admin->id || session('id') == $admin->id) {
+            session([
+                'username'        => $admin->username,
+                'name'            => $admin->name,
+                'role'            => $admin->role,
+                'email'           => $admin->email,
+                'profile_picture' => $updateData['profile_picture'] ?? $admin->profile_picture,
+            ]);
+        }
 
         // ส่ง Session ไปแจ้งเตือน editinfo ผ่าน notify.blade.php พร้อมใส่ชื่อที่แก้ไข
-        return redirect('/')->with('result', 'editinfo')->with('message', 'แก้ไขข้อมูล "' . $admin->name . '" เรียบร้อยแล้ว');
+        return redirect('/pc-csmju')->with('result', 'editinfo')->with('message', 'แก้ไขข้อมูล "' . $admin->name . '" เรียบร้อยแล้ว');
     }
 
     /**
@@ -301,7 +310,7 @@ class Teacherandofficercontroller extends Controller
     {
         $admin = Teacherandofficermodel::find($id);
         if (!$admin) {
-            return redirect('/')->with('result', 'false')->with('message', 'ไม่พบข้อมูลที่ต้องการลบ');
+            return redirect('/pc-csmju')->with('result', 'false')->with('message', 'ไม่พบข้อมูลที่ต้องการลบ');
         }
 
         // เก็บชื่อไว้ก่อน เพื่อนำไปแสดงในแจ้งเตือนหลังลบ
@@ -318,7 +327,7 @@ class Teacherandofficercontroller extends Controller
         Log::info('Teacher/Officer deleted successfully for ID: ' . $id);
 
         // ส่ง Session ไปแจ้งเตือน deleteinfo ผ่าน notify.blade.php พร้อมใส่ชื่อที่ลบ
-        return redirect('/')->with('result', 'deleteinfo')->with('message', 'ลบข้อมูล "' . $deletedName . '" เรียบร้อยแล้ว');
+        return redirect('/pc-csmju')->with('result', 'deleteinfo')->with('message', 'ลบข้อมูล "' . $deletedName . '" เรียบร้อยแล้ว');
     }
 
     /**
@@ -328,7 +337,7 @@ class Teacherandofficercontroller extends Controller
     {
         $admin = Teacherandofficermodel::find($id);
         if (!$admin) {
-            return redirect('/')->with('result', 'false')->with('message', 'ไม่พบข้อมูลที่ต้องการเปลี่ยนสถานะ');
+            return redirect('/pc-csmju')->with('result', 'false')->with('message', 'ไม่พบข้อมูลที่ต้องการเปลี่ยนสถานะ');
         }
 
         // ตรวจสอบค่าสถานะที่ส่งมา: ถ้าเป็น '1' ให้เป็น 1 (เปิดใช้งานปกติ), ถ้าไม่ใช่ให้เป็น '0' (ปิดใช้งาน)
@@ -338,7 +347,7 @@ class Teacherandofficercontroller extends Controller
         Log::info('Status changed for ID ' . $id . ' to ' . $newStatus);
 
         $statusText = ($newStatus == '1') ? 'เปิดใช้งานปกติ' : 'ปิดใช้งาน';
-        return redirect('/')->with('result', 'true')->with('message', 'เปลี่ยนสถานะของ "' . $admin->name . '" เป็น "' . $statusText . '" เรียบร้อยแล้ว');
+        return redirect('/pc-csmju')->with('result', 'true')->with('message', 'เปลี่ยนสถานะของ "' . $admin->name . '" เป็น "' . $statusText . '" เรียบร้อยแล้ว');
     }
 
 }

@@ -107,7 +107,6 @@ $(document).ready(function () {
             padding: 6px 14px 6px 36px !important;
             font-size: 13.5px !important;
             border-radius: 8px !important;
-            border: 1px solid #cdd5dfff !important;
             background-color: #ffffff !important;
             color: #0f172a !important;
             outline: none !important;
