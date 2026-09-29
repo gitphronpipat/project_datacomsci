@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Teacherandofficermodel extends Authenticatable
+/**
+ * Model กลางสำหรับการยืนยันตัวตน (Authentication) ของทุก Role ในระบบ
+ * ผูกกับตาราง admins เพื่อไม่ให้สับสนกับการจัดการข้อมูลอาจารย์/เจ้าหน้าที่
+ */
+class Authmodel extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -16,7 +20,7 @@ class Teacherandofficermodel extends Authenticatable
     protected $table = 'admins';
 
     /**
-     * กำหนดฟิลด์ที่อนุญาตให้บันทึกหรือแก้ไขข้อมูลได้ (White-list ป้องกัน Mass Assignment)
+     * ฟิลด์ที่อนุญาตให้บันทึกหรือแก้ไขข้อมูลได้
      */
     protected $fillable = [
         'username',
@@ -40,7 +44,7 @@ class Teacherandofficermodel extends Authenticatable
     ];
 
     /**
-     * Accessor: ตรวจสอบและแปลง path รูปโปรไฟล์ให้ชี้ไปยัง profile_image/teacherandofficer เสมอ
+     * Accessor: แปลง path รูปโปรไฟล์ให้ถูกต้องเสมอ
      */
     public function getProfilePictureAttribute($value)
     {
@@ -48,13 +52,10 @@ class Teacherandofficermodel extends Authenticatable
             return null;
         }
 
-        // ถ้ามี subfolder teacherandofficer อยู่แล้ว ให้คืนค่านั้น
         if (str_contains($value, 'teacherandofficer')) {
             return $value;
         }
 
-        // ถ้าเป็น path เก่า profile_image/xxx.jpg ให้แปลงเป็น profile_image/teacherandofficer/xxx.jpg
         return str_replace('profile_image/', 'profile_image/teacherandofficer/', $value);
     }
 }
-

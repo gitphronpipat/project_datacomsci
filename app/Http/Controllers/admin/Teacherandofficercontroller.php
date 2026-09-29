@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Teacherandofficermodel;
+use App\Models\admin\Teacherandofficermodel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -58,6 +58,7 @@ class Teacherandofficercontroller extends Controller
         $messages = [
             'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน (Username)',
             'username.max'      => 'ชื่อผู้ใช้งาน (Username) ต้องมีความยาวไม่เกิน 50 ตัวอักษร',
+            'username.unique'   => 'ชื่อผู้ใช้งาน (Username) "' . $request->username . '" มีอยู่ในระบบแล้ว กรุณาใช้ชื่ออื่น',
             'password.required' => 'กรุณากรอกรหัสผ่าน',
             'password.min'      => 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร',
             'name.required'     => 'กรุณากรอกชื่อ-นามสกุล',
@@ -74,9 +75,9 @@ class Teacherandofficercontroller extends Controller
             'profile_picture.max'   => 'ขนาดไฟล์รูปภาพต้องไม่เกิน 10MB',
         ];
 
-        // ตรวจสอบความถูกต้องของข้อมูล (Username ซ้ำได้ แต่ ชื่อ-นามสกุล, อีเมล, เบอร์โทร ห้ามซ้ำ)
+        // ตรวจสอบความถูกต้องของข้อมูล (Username, ชื่อ-นามสกุล, อีเมล, เบอร์โทร ห้ามซ้ำ)
         $validator = Validator::make($request->all(), [
-            'username'        => 'required|string|max:50', // สามารถซ้ำได้
+            'username'        => 'required|string|max:50|unique:admins,username', // ห้ามซ้ำ
             'password'        => 'required|string|min:6',
             'name'            => 'required|string|max:50|unique:admins,name', // ห้ามซ้ำ
             'role'            => 'required|in:admin,teacher,officer',
@@ -90,8 +91,9 @@ class Teacherandofficercontroller extends Controller
             $errors = $validator->errors();
             $resultKey = 'warning';
 
-            // ถ้ามีข้อมูลซ้ำ (ชื่อ-นามสกุล, อีเมล, เบอร์โทรศัพท์)
-            if (($errors->has('name') && str_contains($errors->first('name'), 'มีอยู่ในระบบแล้ว')) ||
+            // ถ้ามีข้อมูลซ้ำ (Username, ชื่อ-นามสกุล, อีเมล, เบอร์โทรศัพท์)
+            if (($errors->has('username') && str_contains($errors->first('username'), 'มีอยู่ในระบบแล้ว')) ||
+                ($errors->has('name') && str_contains($errors->first('name'), 'มีอยู่ในระบบแล้ว')) ||
                 ($errors->has('email') && str_contains($errors->first('email'), 'มีอยู่ในระบบแล้ว')) ||
                 ($errors->has('phone') && str_contains($errors->first('phone'), 'มีอยู่ในระบบแล้ว'))) {
                 $resultKey = 'duplicate';
@@ -185,6 +187,7 @@ class Teacherandofficercontroller extends Controller
         $messages = [
             'username.required' => 'กรุณากรอกชื่อผู้ใช้งาน (Username)',
             'username.max'      => 'ชื่อผู้ใช้งาน (Username) ต้องมีความยาวไม่เกิน 50 ตัวอักษร',
+            'username.unique'   => 'ชื่อผู้ใช้งาน (Username) "' . $request->username . '" มีอยู่ในระบบแล้ว กรุณาใช้ชื่ออื่น',
             'password.min'      => 'รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 6 ตัวอักษร',
             'name.required'     => 'กรุณากรอกชื่อ-นามสกุล',
             'name.max'          => 'ชื่อ-นามสกุล ต้องมีความยาวไม่เกิน 50 ตัวอักษร',
@@ -200,9 +203,9 @@ class Teacherandofficercontroller extends Controller
             'profile_picture.max'   => 'ขนาดไฟล์รูปภาพต้องไม่เกิน 10MB',
         ];
 
-        // ตรวจสอบความถูกต้องของข้อมูล (ชื่อ-นามสกุล, Email, และ เบอร์โทรศัพท์ ไม่ซ้ำกับคนอื่น ยกเว้นตัวเอง ส่วน username ซ้ำได้)
+        // ตรวจสอบความถูกต้องของข้อมูล (Username, ชื่อ-นามสกุล, Email, และ เบอร์โทรศัพท์ ไม่ซ้ำกับคนอื่น ยกเว้นตัวเอง)
         $validator = Validator::make($request->all(), [
-            'username'        => 'required|string|max:50', // สามารถซ้ำได้
+            'username'        => 'required|string|max:50|unique:admins,username,' . $id, // ห้ามซ้ำ ยกเว้นของตนเอง
             'password'        => 'nullable|string|min:6',
             'name'            => 'required|string|max:50|unique:admins,name,' . $id, // ห้ามซ้ำ ยกเว้นของตนเอง
             'role'            => 'required|in:admin,teacher,officer',
@@ -216,8 +219,9 @@ class Teacherandofficercontroller extends Controller
             $errors = $validator->errors();
             $resultKey = 'warning';
 
-            // ถ้ามีข้อมูลซ้ำ (ชื่อ-นามสกุล, อีเมล, เบอร์โทรศัพท์)
-            if (($errors->has('name') && str_contains($errors->first('name'), 'มีอยู่ในระบบแล้ว')) ||
+            // ถ้ามีข้อมูลซ้ำ (Username, ชื่อ-นามสกุล, อีเมล, เบอร์โทรศัพท์)
+            if (($errors->has('username') && str_contains($errors->first('username'), 'มีอยู่ในระบบแล้ว')) ||
+                ($errors->has('name') && str_contains($errors->first('name'), 'มีอยู่ในระบบแล้ว')) ||
                 ($errors->has('email') && str_contains($errors->first('email'), 'มีอยู่ในระบบแล้ว')) ||
                 ($errors->has('phone') && str_contains($errors->first('phone'), 'มีอยู่ในระบบแล้ว'))) {
                 $resultKey = 'duplicate';

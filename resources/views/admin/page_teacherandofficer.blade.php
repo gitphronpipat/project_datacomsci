@@ -4,11 +4,11 @@
             <div class="page-heading mb-3 py-2">
                 <div class="row align-items-center">
                     <div class="col-6">
-                        <h3 class="m-0"><i class="fas fa-user-shield me-2"></i>จัดการข้อมูลอาจารย์และผู้ดูแล</h3>
+                        <h3 class="m-0"><i class="fas fa-user-shield me-2"></i>จัดการข้อมูลอาจารย์และเจ้าหน้าที่</h3>
                     </div>
                     <div class="col-6 text-end">
-                        <a href="{{ url('admin/create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> เพิ่มข้อมูล
+                        <a href="{{ url('pc-csmju/admin/create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> เพิ่มข้อมูลอาจารย์&เจ้าหน้าที่
                         </a>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                                                             data-bs-target="#modalConfirmAction"
                                                             data-title="ยืนยันการปิดใช้งาน?"
                                                             data-message="คุณต้องการปิดการใช้งานบัญชี <b style='font-size: 18px;' >'{{ $name }}'</b>  <br>ผู้ใช้จะไม่สามารถเข้าสู่ระบบได้ชั่วคราว"
-                                                            data-url="{{ url('admin/status/' . $id . '/0') }}"
+                                                            data-url="{{ url('pc-csmju/admin/status/' . $id . '/0') }}"
                                                             data-btn-text="ปิดใช้งาน"
                                                             data-btn-class="btn-danger"
                                                             data-icon="fas fa-ban"
@@ -118,7 +118,7 @@
                                                             data-bs-target="#modalConfirmAction"
                                                             data-title="ยืนยันการเปิดใช้งาน?"
                                                             data-message="คุณต้องการเปิดใช้งานบัญชี <b style='font-size: 18px;' >'{{ $name }}'</b>"
-                                                            data-url="{{ url('admin/status/' . $id . '/1') }}"
+                                                            data-url="{{ url('pc-csmju/admin/status/' . $id . '/1') }}"
                                                             data-btn-text="เปิดใช้งาน"
                                                             data-btn-class="btn-success"
                                                             data-icon="fas fa-check-circle"
@@ -130,19 +130,18 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="btn-group" role="group">
-                                                        <a href="{{ url('admin/edit/' . $id) }}"
+                                                        <a href="{{ url('pc-csmju/admin/edit/' . $id) }}"
                                                             class="btn btn-warning btn-sm" title="แก้ไข">
-                                                            แก้ไข <i class="fas fa-edit"></i> 
+                                                            <i class="fas fa-edit"></i>
                                                         </a>
                                                         <a href="#" 
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#modalDel" 
-                                                            data-url="{{ url('admin/del/' . $id) }}" 
+                                                            data-url="{{ url('pc-csmju/admin/del/' . $id) }}" 
                                                             data-name="{{ $name }}" 
-                                                            class="btn btn-danger btn-sm " title="ลบ">
-                                                            <i class="fas fa-trash-alt"></i> ลบ
+                                                            class="btn btn-danger btn-sm" title="ลบ">
+                                                            <i class="fas fa-trash-alt"></i>
                                                         </a>
-
                                                     </div>
                                                 </td>
                                             </tr>

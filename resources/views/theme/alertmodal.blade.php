@@ -104,6 +104,37 @@
     </div>
 </div>
 
+<!-- 4. Modal กลางยืนยันการบันทึกข้อมูลนำเข้าสู่ระบบ (Data Import Confirmation Modal) -->
+<div class="modal fade" id="modalConfirmSaveData" tabindex="-1" aria-labelledby="modalConfirmSaveDataLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+            <div class="modal-body text-center p-4 pt-4 pb-5">
+                <div class="alert-i-con">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm"
+                         id="confirmSaveDataIconBox"
+                         style="width: 76px; height: 76px; font-size: 32px;">
+                        <i id="confirmSaveDataIcon" class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bold text-dark mb-2 fs-5" id="modalConfirmSaveDataLabel">
+                    ยืนยันการบันทึกข้อมูล?
+                </h4>
+                <div class="text-muted small mb-4" id="confirmSaveDataMessage" style="margin-bottom: 2rem !important">
+                    <!-- ข้อความและคำเตือนจำนวนข้อผิดพลาดจะถูกเติมผ่าน JavaScript -->
+                </div>
+                <div class="d-flex justify-content-center alert-btn">
+                    <button type="button" class="btn btn-light border rounded-pill px-4 py-2" data-bs-dismiss="modal" id="btnCancelSaveData">
+                        ยกเลิก
+                    </button>
+                    <button type="button" id="btnExecuteSaveData" class="btn btn-success rounded-pill px-4 py-2 shadow-sm">
+                        <i class="fas fa-save me-1"></i> ยืนยันการบันทึก
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // ดักฟังการเรียกใช้ Modal ยืนยันการกระทำทั่วไป (modalConfirmAction)
     $(document).ready(function() {

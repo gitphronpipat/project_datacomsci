@@ -293,9 +293,16 @@ $(document).ready(function () {
             { targets: -1, orderable: false },
         ],
 
-        // สร้างปุ่ม 'คืนค่ารายการ' และระบบล้างค่าการค้นหา
+        // สร้างปุ่ม 'คืนค่ารายการ' และระบบล้างค่าการค้นหา (ผูกเฉพาะตารางนั้นๆ ป้องกันปุ่มขึ้นซ้ำ)
         initComplete: function () {
             const api = this.api();
+            const $wrapper = $(api.table().container());
+            const $filter = $wrapper.find('.dataTables_filter');
+
+            // ตรวจสอบว่าในกล่องค้นหาของตารางนี้มีปุ่ม 'คืนค่ารายการ' อยู่แล้วหรือไม่ ป้องกันการเบิ้ลปุ่ม
+            if ($filter.find('.btn-reset-filter').length > 0) {
+                return;
+            }
 
             // สร้างปุ่ม 'คืนค่ารายการ' พร้อมไอคอนลูกศรหมุนวน
             const $resetBtn = $(
@@ -304,13 +311,13 @@ $(document).ready(function () {
                 '</button>'
             );
 
-            // นำปุ่มไปวางต่อท้ายช่องค้นหา
-            $('.dataTables_filter').append($resetBtn);
+            // นำปุ่มไปวางต่อท้ายช่องค้นหาของตารางนี้เท่านั้น (ไม่ใช้ $('.dataTables_filter') ทั้งหน้า)
+            $filter.append($resetBtn);
 
-            // เมื่อคลิกปุ่ม ให้ล้างคำค้นหาและคืนค่าตารางกลับสู่สภาพเดิม
+            // เมื่อคลิกปุ่ม ให้ล้างคำค้นหาและคืนค่าเฉพาะตารางนี้กลับสู่สภาพเดิม
             $resetBtn.on('click', function () {
-                $('.dataTables_filter input').val(''); // ล้างข้อความในช่องพิมพ์
-                api.search('').order([[0, 'asc']]).draw(); // ล้างตัวกรองและคืนค่าเรียงลำดับ
+                $filter.find('input').val(''); // ล้างข้อความในช่องพิมพ์ของตารางนี้
+                api.search('').order([[0, 'asc']]).draw(); // ล้างตัวกรองและคืนค่าเรียงลำดับของตารางนี้
             });
         }
 

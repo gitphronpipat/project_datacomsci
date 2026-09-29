@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
-            if (mainContent) mainContent.style.marginLeft = '70px';
+            if (mainContent) mainContent.style.marginLeft = '65px';
         }
         updateIcon(isCollapsed);
 
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const collapsed = sidebar.classList.contains('collapsed');
             localStorage.setItem('sidebarCollapsed', collapsed);
             if (mainContent) {
-                mainContent.style.marginLeft = collapsed ? '70px' : '240px';
+                mainContent.style.marginLeft = collapsed ? '65px' : '240px';
             }
             updateIcon(collapsed);
         });

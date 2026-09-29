@@ -29,9 +29,76 @@
     <script src="{{ asset('js/cropper.js') }}"></script>
     <script src="{{ asset('js/custom_select.js') }}"></script>
     <script src="{{ asset('js/eyepass.js') }}"></script>
+    <script src="{{ asset('js/steppage.js') }}"></script>
 
 
     <style>
+        /* =========================================================
+           ระบบสลับ Step / Tabs (steppage.js) - สไตล์ Underline ตามภาพตัวอย่าง
+           ========================================================= */
+        .step-tabs {
+            display: flex;
+            align-items: center;
+            border-bottom: 1.5px solid #e2e8f0;
+            gap: 0.25rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0;
+            overflow-x: auto;
+            overflow-y: hidden !important;
+            white-space: nowrap;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .step-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .step-tabs .step-btn {
+            position: relative;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 0.5rem 0.85rem 0.75rem 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -1.5px;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .step-tabs .step-btn:hover {
+            color: #1e293b;
+        }
+
+        .step-tabs .step-btn.active {
+            color: #1a56db;
+            font-weight: 600;
+            border-bottom: 3px solid #1a56db;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .step-tabs .tab-divider {
+            color: #cbd5e1;
+            font-size: 16px;
+            user-select: none;
+            margin: 0 0.5rem 0.4rem 0.5rem;
+        }
+
+        .step-pane {
+            display: none;
+        }
+
+        .step-pane.active {
+            display: block;
+        }
+
         /* =========================================================
            1. โครงสร้างพื้นฐานของหน้าเว็บ (Base Layout & Typography)
            ========================================================= */
@@ -88,12 +155,15 @@
         /* ปรับแต่งสำหรับหน้าจอมือถือและแท็บเล็ต (กว้างไม่เกิน 768px) */
         @media (max-width: 768px) {
             #main {
-                margin-left: 0;       /* ไม่ต้องเว้นระยะซ้าย เพราะเมนูจะซ่อนหรือพับ */
-                padding: 1rem;        /* ลดช่องว่างขอบจอให้พอดีกับหน้าจอมือถือ */
+                margin-left: 0;
+                /* ไม่ต้องเว้นระยะซ้าย เพราะเมนูจะซ่อนหรือพับ */
+                padding: 1rem;
+                /* ลดช่องว่างขอบจอให้พอดีกับหน้าจอมือถือ */
             }
 
             body {
-                font-size: 15px;      /* ลดขนาดตัวอักษรลงเล็กน้อยเพื่อให้อ่านง่ายบนมือถือ */
+                font-size: 15px;
+                /* ลดขนาดตัวอักษรลงเล็กน้อยเพื่อให้อ่านง่ายบนมือถือ */
             }
         }
 
@@ -134,8 +204,10 @@
 
         /* ข้อความตัวอย่างในช่องพิมพ์ (Placeholder) ทุกช่อง */
         .form-control::placeholder {
-            color: #b6ccd0 !important; /* 👈 ใส่โค้ดสีที่ต้องการ เช่น เทานวลสบายตา */
-            opacity: 1 !important;     /* 👈 สำคัญมาก: ต้องใส่ 1 เพื่อไม่ให้เบราว์เซอร์ปรับสีจางลงเอง */
+            color: #b6ccd0 !important;
+            /* 👈 ใส่โค้ดสีที่ต้องการ เช่น เทานวลสบายตา */
+            opacity: 1 !important;
+            /* 👈 สำคัญมาก: ต้องใส่ 1 เพื่อไม่ให้เบราว์เซอร์ปรับสีจางลงเอง */
         }
 
 
@@ -144,11 +216,15 @@
         }
 
         .navbar-brand {
-            color: #b8b6a3;          /* เปลี่ยนสีชื่อแบรนด์ */
-            font-weight: 700;        /* ปรับให้หนาขึ้น */
+            color: #b8b6a3;
+            /* เปลี่ยนสีชื่อแบรนด์ */
+            font-weight: 700;
+            /* ปรับให้หนาขึ้น */
         }
+
         .navbar-brand:hover {
-            color: #4a5d23;          /* สีตอนเอาเมาส์ชี้ */
+            color: #4a5d23;
+            /* สีตอนเอาเมาส์ชี้ */
         }
 
         /* =========================================================
@@ -161,6 +237,7 @@
             color: #fff;
             border-radius: 8px;
         }
+
         /* สีปุ่มหลักเมื่อเอาเมาส์ไปชี้ (Hover) */
         .btn-primary:hover {
             background-color: #1f55c9 !important;
@@ -174,11 +251,12 @@
             border-color: #198754;
             border-radius: 8px;
         }
+
         /* สีปุ่มสำเร็จเมื่อเอาเมาส์ไปชี้ (Hover) */
         .btn-success:hover {
             background-color: #136840;
             border-color: #136840;
-   
+
         }
 
         /* ปุ่มสีสว่าง (Light Button เช่น ปุ่ม 'ยกเลิก') */
@@ -191,58 +269,159 @@
         .btn-outline-secondary {
             color: #c0bcf1;
         }
+
         /* สีปุ่มขอบบางเมื่อเอาเมาส์ไปชี้ (Hover) */
         .btn-outline-secondary:hover {
             color: #fff;
         }
 
         /* ปุ่มแจ้งเตือน/ปุ่มแก้ไขสีส้ม (Warning Button เช่น ปุ่มแก้ไขในตาราง) */
-        .btn-warning {
+         {
             background-color: #f6d59b;
             border-color: #f59e0b;
             color: #fff;
             border-radius: 8px;
         }
+
         /* สีปุ่มเตือนเมื่อเอาเมาส์ไปชี้ (Hover) */
         .btn-warning:hover {
-            background-color: #d97706;
-            border-color: #d97706;
-            color: #fff;
+            background-color: #f59e0b !important;
+            border-color: #f59e0b !important;
         }
 
         /* ปุ่มลบ/ปุ่มอันตราย (Danger Button เช่น ปุ่มลบในตาราง ขาวขอบแดง) */
+        .btn-warning { 
+            border: 1.5px solid #f59e0b !important; 
+        }
+
+        .btn-warning:hover i {
+            color: #ffffff !important;
+        }
+
+        .btn-warning i {
+            color: #f59e0b !important;
+            font-size: 13.5px !important;
+            margin: 0 !important;
+            transition: color 0.2s ease !important;
+        }
+
         .btn-danger {
-            background-color: #fff;
-            border: 1px solid #dc3545;
-            color: #dc3545;
-            border-radius: 8px;
+            background-color: #ffffff !important;
+            width: 32px !important;
+            height: 32px !important;
+            padding: 0 !important;
+            border-radius: 6px !important;
+            border: 1.5px solid #ef4444 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+            transition: all 0.2s ease !important;
         }
+
         /* สีปุ่มลบเมื่อเอาเมาส์ไปชี้ (Hover เปลี่ยนเป็นพื้นแดงตัวหนังสือขาว) */
-        .btn-danger:hover {
-            background-color: #dc3545;
-            color: #fff;
+
+        .btn-danger i {
+            color: #ef4444 !important;
+            font-size: 13.5px !important;
+            margin: 0 !important;
+            transition: color 0.2s ease !important;
         }
+
+        .btn-danger:hover {
+            background-color: #ef4444 !important;
+            border-color: #ef4444 !important;
+        }
+
+        .btn-danger:hover i {
+            color: #ffffff !important;
+        }
+
         .bg-primary {
             color: black !important;
-            background-color : #08f376 !important;
+            background-color: #08f376 !important;
             min-height: 25px !important;
             font-size: 12px;
         }
+
+        .btn-group {
+            display: inline-flex !important;
+            gap: 6px !important;
+            box-shadow: none !important;
+        }
+
+        .btn-outline-danger {
+            background-color: #ffffff !important;
+            border: 1.5px solid #ef4444 !important;
+            color: #dc2626 !important;
+            font-weight: 500 !important;
+            font-size: 13px !important;
+            border-radius: 6px !important;
+            padding: 0.28rem 0.75rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+            transform: none !important;
+            transition: background-color 0.15s ease, color 0.15s ease !important;
+        }
+
+        .btn-outline-danger i {
+            color: #ef4444 !important;
+            transition: color 0.15s ease !important;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #ef4444 !important;
+            border: 1.5px solid #ef4444 !important;
+            color: #ffffff !important;
+            transform: none !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        .btn-outline-danger:hover i {
+            color: #ffffff !important;
+        }
+
         .btn-outline-success {
-            color: #04f4ec !important;
-            border-color: #04f4ec !important;
-            border-width: 2px !important;
+            background-color: #ffffff !important;
+            border: 1.5px solid #10b981 !important;
+            color: #059669 !important;
+            font-weight: 500 !important;
+            font-size: 13px !important;
+            border-radius: 6px !important;
+            padding: 0.28rem 0.75rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+            transform: none !important;
+            transition: background-color 0.15s ease, color 0.15s ease !important;
         }
+
+        .btn-outline-success i {
+            color: #10b981 !important;
+            transition: color 0.15s ease !important;
+        }
+
+
         .btn-outline-success:hover {
-            color: #000 !important;
-            border-color: #04f4ec !important;
-            border-width: 2px !important;
+            background-color: #10b981 !important;
+            border: 1.5px solid #10b981 !important;
+            color: #ffffff !important;
+            transform: none !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
         }
+
+        .btn-outline-success:hover i {
+            color: #ffffff !important;
+        }
+
 
         .btn-back-page {
             color: #ffffff !important;
-            background: #5b6e75  !important;
-            border-color: #5b6e75  !important;
+            background: #5b6e75 !important;
+            border-color: #5b6e75 !important;
             text-align: center !important;
             width: 110px !important;
             padding: 8px 0px !important;
@@ -253,31 +432,43 @@
 
         .btn-back-page:hover {
             color: #ffffff !important;
-            background: #425156  !important;
-            border-color: #425156  !important;
+            background: #425156 !important;
+            border-color: #425156 !important;
 
         }
 
         /* คลาสสำหรับป้ายแสดงสิทธิ์อาจารย์ */
         .roleteacher {
-            color: #4a5d23;              /* สีตัวหนังสือ */
-            background-color: #eaf3db;   /* สีพื้นหลังกล่องจางๆ ให้ดูสวย */
-            padding: 4px 10px;           /* ช่องไฟขอบใน */
-            border-radius: 6px;          /* มุมโค้งมน */
-            font-weight: 600;            /* ตัวหนังสือหนา */
-            font-size: 12px;
-            display: inline-block;  
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0.25rem 0.65rem !important;
+            font-size: 12.5px !important;
+            font-weight: 500 !important;
+            border-radius: 6px !important;
+            line-height: 1.35 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+            white-space: nowrap !important;
+            background-color: #f0f9ff !important;
+            border: 1px solid #bae6fd !important;
+            color: #0369a1 !important;
         }
 
         /* คลาสสำหรับเจ้าหน้าที่ */
         .roleofficer {
-            color: #0d6efd;
-            background-color: #e7f1ff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 12px;
-            display: inline-block;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0.25rem 0.65rem !important;
+            font-size: 12.5px !important;
+            font-weight: 500 !important;
+            border-radius: 6px !important;
+            line-height: 1.35 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+            white-space: nowrap !important;
+            background-color: #f5f3ff !important;
+            border: 1px solid #ddd6fe !important;
+            color: #6d28d9 !important;
         }
 
         /* แถวตารางที่ปิดใช้งาน (Inactive Row) ปรับสีจางลง พร้อมเอฟเฟกต์ชี้เมาส์ */
@@ -296,9 +487,62 @@
             color: #64748b !important;
         }
     </style>
-    
-    <style> 
-                /* =========================================================
+
+    <style>
+        tbody td strong {
+            color: #09090b !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+
+        table code {
+            background-color: transparent !important;
+            color: #18181b !important;
+            font-family: inherit !important;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            padding: 0 !important;
+        }
+
+        table .text-muted {
+            color: #18181b !important;
+        }
+        table td .fa-envelope,
+        table td .fa-phone {
+            color: #71717a !important;
+            width: 14px !important;
+        }
+
+        /* 5. โครงสร้างและสีตาราง: Pure White Minimalist */
+        table.table-bordered th,
+        table.table-bordered td,
+        table.table-bordered {
+            border-color: #e4e4e7 !important;
+        }
+        table thead.table-light,
+        table thead.table-light tr,
+        table thead.table-light th {
+            background-color: #f9fafb !important;
+            box-shadow: inset 0 0 0 9999px #f9fafb !important;
+            border-color: #e4e4e7 !important;
+            color: #374151 !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+        }
+        table.table-striped > tbody > tr > *,
+        table tbody tr > * {
+            background-color: #ffffff !important;
+            box-shadow: inset 0 0 0 9999px #ffffff !important;
+        }
+        table.table-hover > tbody > tr:hover > * {
+            background-color: #f4f4f5 !important;
+            box-shadow: inset 0 0 0 9999px #f4f4f5 !important;
+            transition: background-color 0.15s ease !important;
+        }
+    </style>
+
+    <style>
+        /* =========================================================
            แนวทางที่ 2: Modern Smooth Custom Select Dropdown
            ========================================================= */
         .custom-select-wrapper {
@@ -387,7 +631,8 @@
         .custom-select-option:hover {
             background-color: #f1f5f9;
             color: #0f172a;
-            padding-left: 18px; /* ขยับตัวหนังสือนิดๆ เพิ่มมิติ */
+            padding-left: 18px;
+            /* ขยับตัวหนังสือนิดๆ เพิ่มมิติ */
         }
 
         /* ตัวเลือกที่กำลังถูกเลือกอยู่ในปัจจุบัน (ไฮไลต์สีฟ้าเข้าชุด) */

@@ -10,7 +10,7 @@
                     <p class="text-muted small m-0 mt-1">กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งานใหม่ในระบบ</p>
                 </div>
                 <div class="col-12 col-sm-6 text-sm-end">
-                    <a href="{{ url('/') }}" class="btn btn-back-page btn-sm px-3 shadow-sm rounded-pill">
+                    <a href="{{ url('/pc-csmju') }}" class="btn btn-back-page btn-sm px-3 shadow-sm rounded-pill">
                         <i class="fas fa-arrow-left me-1"></i> ย้อนกลับ
                     </a>
                 </div>
@@ -19,7 +19,7 @@
 
         <!-- ฟอร์มกรอกข้อมูล -->
         <div class="page-content">
-            <form action="{{ url('admin/create') }}" method="POST" enctype="multipart/form-data" id="adminAddForm">
+            <form action="{{ url('pc-csmju/admin/create') }}" method="POST" enctype="multipart/form-data" id="adminAddForm">
                 @csrf
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4"style="border: 1px solid #e2e8f0 !important;">
                     <div class="card-body p-4 p-md-5">

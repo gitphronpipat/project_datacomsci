@@ -8,7 +8,7 @@
 <body>
 
     @include('theme.navbar')
-    @include('admin.theme.menu')
+    @include('teacher.theme.menu')
 
     <div id="main">
         @include($content)

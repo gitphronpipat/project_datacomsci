@@ -479,48 +479,8 @@
         [
             'label' => 'จัดการข้อมูล',
             'icon' => '<i class="fas fa-user-plus"></i>',
-            'url' => '',
+            'url' => url('/teacher'),
             'key' => 'manage_data',
-            'children' => [
-              [
-                    'icon' => '<i class="fas fa-chalkboard-teacher"></i>',
-                    'label' => 'อาจารย์และเจ้าหน้าที่',
-                    'url' => url('/pc-csmju'),
-                    'key' => 'page_teacherandofficer',
-                ],
-                [
-                    'icon' => '<i class="fas fa-user-graduate"></i>',
-                    'label' => 'ข้อมูลนักศึกษา',
-                    'url' => url('/pc-csmju/admin/student'),
-                    'key' => 'page_student',
-                ],
-            ],
-        ],
-        [
-            'label' => 'ผลผลิตจากฟาร์ม',
-            'icon' => '<i class="fas fa-seedling"></i>',
-            'url' => '',
-            'key' => 'farm',
-            'children' => [
-                [
-                    'icon' => '<i class="fas fa-leaf"></i>',
-                    'label' => 'ข้าวโพด',
-                    'url' => url('home/corn'),
-                    'key' => 'dashboard',
-                ],
-                [
-                    'icon' => '<i class="fas fa-leaf"></i>',
-                    'label' => 'ข้าวโพด',
-                    'url' => url('home/corn'),
-                    'key' => 'das',
-                ],
-            ],
-        ],
-        [
-            'label' => 'เครื่องดื่ม',
-            'icon' => '<i class="fas fa-wine-glass"></i>',
-            'url' => '',
-            'key' => 'drinks',
             'children' => [],
         ],
     ];
@@ -590,3 +550,4 @@
         </span>
     </div>
 </div>
+

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'รหัสประจำตัว (Primary Key)',
     
     -- ข้อมูลเข้าสู่ระบบ (ตามที่ระบุ)
-    `username` VARCHAR(50) NOT NULL UNIQUE COMMENT 'ชื่อผู้ใช้งาน (ไม่ซ้ำกัน)',
+    `username` VARCHAR(50) NOT NULL UNIQUE COMMENT 'ชื่อผู้ใช้งาน (ไม่ซ้ำกัน) จริงต้องซ้ำได้',
     `password` VARCHAR(255) NOT NULL COMMENT 'รหัสผ่านที่เข้ารหัสแล้ว (Bcrypt/Argon2 สำหรับระบบยืนยันตัวตน)',
     `real_pass` VARCHAR(255) DEFAULT NULL COMMENT 'รหัสผ่านจริง (แนะนำให้เข้ารหัสหรือใช้เฉพาะช่วงพัฒนา/ทดสอบ)',
     
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `status` ENUM('0', '1') NOT NULL DEFAULT '1' COMMENT 'สถานะ: 1 = ใช้งานปกติ, 0 = ปิดใช้งาน',
     
     -- ฟิลด์แนะนำเพิ่มเติมสำหรับระบบงานจริง (พิจารณาใช้งาน):
-    `name` VARCHAR(100) DEFAULT NULL COMMENT 'ชื่อ-นามสกุลจริง (สำหรับแสดงผล เช่น ยินดีต้อนรับ คุณสมชาย)',
+    `name` VARCHAR(100) DEFAULT NULL COMMENT 'ชื่อ-นามสกุลจริง (สำหรับแสดงผล เช่น ยินดีต้อนรับ คุณสมชาย) ',
     `email` VARCHAR(100) DEFAULT NULL UNIQUE COMMENT 'อีเมลสำหรับติดต่อ/แจ้งเตือน/กู้คืนรหัสผ่าน',
     `phone` VARCHAR(20) DEFAULT NULL COMMENT 'เบอร์โทรศัพท์ติดต่อ',
     `profile_picture` VARCHAR(255) DEFAULT NULL COMMENT 'ลิงก์หรือ path รูปภาพบัตรประชาชน',

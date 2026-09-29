@@ -8,17 +8,17 @@
 <body>
 
     @include('theme.navbar')
-    @include('admin.theme.menu')
+    @include('officer.theme.menu')
 
     <div id="main">
         @include($content)
     </div>
     
 
-    @include('theme.modalmixtool')
+    @include('theme.modalmix')
 
     <!-- ระบบ Modal ยืนยันการตัดสินใจ (ออกจากระบบ, ลบข้อมูล, ยืนยันเปลี่ยนสถานะ) -->
-    @include('theme.alertmodal')
+    @include('theme.alert')
     
     <!-- ระบบแจ้งเตือนกลาง (iziToast Notifications) -->
     @include('theme.notify')

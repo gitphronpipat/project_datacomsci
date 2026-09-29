@@ -323,8 +323,8 @@
             <!-- หัวข้อ LOGIN -->
             <h1 class="login-title">ADMIN</h1>
 
-            <!-- ฟอร์มเข้าสู่ระบบส่งไปยัง route login.post (ฟังก์ชัน loginAdmin ใน Controller) -->
-            <form action="{{ route('login.post') }}" method="POST">
+            <!-- ฟอร์มเข้าสู่ระบบส่งไปยัง route admin.login.post (ฟังก์ชัน loginAdmin ใน Controller) -->
+            <form action="{{ route('admin.login.post') }}" method="POST">
                 @csrf
 
                 <!-- ช่องกรอกชื่อผู้ใช้งาน (Username) -->
@@ -335,7 +335,7 @@
                            id="username"
                            autocomplete="username"
                            placeholder="Username" 
-                           value="{{ old('username', Cookie::get('remember_username')) }}" 
+                           value="{{ old('username', Cookie::get('admin_remember_username')) }}" 
                            required 
                            autofocus>
                 </div>
@@ -348,13 +348,14 @@
                            id="password"
                            autocomplete="current-password"
                            placeholder="Password" 
+                           value="{{ old('password', Cookie::get('admin_remember_password')) }}"
                            required>
                     <i class="fa-solid fa-eye-slash toggle-password" id="togglePasswordBtn" onclick="togglePasswordVisibility('password', 'togglePasswordBtn')" title="แสดง/ซ่อนรหัสผ่าน"></i>
                 </div>
 
                 <!-- ตัวเลือก Remember me -->
                 <div class="form-check-custom">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') || Cookie::has('remember_username') ? 'checked' : '' }}>
+                    <input type="checkbox" name="remember" id="remember" {{ old('remember') || Cookie::has('admin_remember_username') || Cookie::has('admin_remember_password') ? 'checked' : '' }}>
                     <label for="remember">Remember me</label>
                 </div>
 
